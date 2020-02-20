@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int minWords=25;
 
     public static final Random RANDOM = new Random();
-
+    public static List<String> solution=new ArrayList<>();
     public static class grid{
       int numAttemptes;
         char [][] cells =new char[nRows][nCols];
@@ -105,7 +105,15 @@ public class MainActivity extends AppCompatActivity {
         g2.setAdapter(arrayAdapter);
 
 
+        Log.d("", "onCreate: "+solution.size());
 
+        for(int i=0,k=0;i<solution.size()-3;i+=3){
+            P00.add(solution.get(i));
+            P11.add(solution.get(i+1));
+            words.add(solution.get(i+2));
+            Log.d("", "onCreate: "+words.get(k));
+            k++;
+        }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -125,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     listDrawableBackground= (ColorDrawable )GridViewItems0.getBackground();
                     colorId = listDrawableBackground.getColor();
 
-                    GridViewItems0.setBackgroundColor(Color.rgb(colors[0]+10,colors[1]+10,colors[2]+10));
+                    GridViewItems0.setBackgroundColor(Color.rgb(new Random().nextInt(255),new Random().nextInt(255),new Random().nextInt(255)));
                     listDrawableBackground= (ColorDrawable )GridViewItems0.getBackground();
 
                    // String colorCode = (String)GridViewItems0.getTag();
@@ -151,15 +159,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,"Wrong!",Toast.LENGTH_LONG).show();
 
                         BackSelectedItem0 = (TextView) gridView.getChildAt(backposition0);
-                        BackSelectedItem1 = (TextView) gridView.getChildAt(backposition1);
+
                         BackSelectedItem0.setSelected(false);
 
                         BackSelectedItem0.setBackgroundColor(colorId);
 
-
-                        BackSelectedItem1.setSelected(false);
-
-                        BackSelectedItem1.setBackgroundColor(Color.rgb(251,220,187));
 
 
 
@@ -178,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                         flag=false;
                         DrowLines(p0, p1);
 
-                        words.remove(PositionOfWords);
+                        words.set(PositionOfWords,"XXXXX");
                         arrayAdapter.notifyDataSetChanged();
                         Log.d("", "onItemClick: ya SEE"+p0+" "+p1);
                         colors[0]=new Random().nextInt(255);
@@ -186,9 +190,16 @@ public class MainActivity extends AppCompatActivity {
                         colors[2]=new Random().nextInt(255);
 
 
+
                         for (int i = 0; i < ps.length; i++) {
                             Log.d("", "array: " + ps[i]);
                             t = (TextView) gridView.getChildAt(ps[i]);
+
+
+
+
+
+
                             t.setSelected(false);
                             t.setBackgroundColor(Color.rgb(colors[0],colors[1],colors[2]));
 
@@ -417,8 +428,11 @@ public static int  tryLocation(grid grid,String word, int dir,int pos){
         grid.solution.add(rr+""+cc);
         grid.solution.add(word);
 
-    }
 
+
+
+    }
+    solution=grid.solution;
     return lettersPlaced;
 }
 
@@ -449,13 +463,13 @@ public static void printResult(grid grid){
         System.out.println();
         for (int i=0;i<size-2;i+=3){
             System.out.println(grid.solution.get(i+2)+" "+grid.solution.get(i)+" " +grid.solution.get(i+1));
-            P00.add(grid.solution.get(i));
-            P11.add(grid.solution.get(i+1));
-            words.add(grid.solution.get(i+2));
+
+
         }
         if(size%2==1){
             System.out.println(grid.solution.get(size-1));
         }
+    Log.d("", "printResult: "+grid.solution.size()/3+" "+P00.size());
 
     }
 
@@ -465,9 +479,10 @@ public static void printResult(grid grid){
        boolean flag1=false;
 
        for (int i=0;i<P00.size();i++){
+           Log.d("", "Check: Word "+ words.get(i) +" "+P00.get(i)+"   "+P11.get(i)+" "+p0+" "+p1);
 
 
-          if(P00.get(i).equalsIgnoreCase(""+p0) &&  P11.get(i).equalsIgnoreCase(""+p1)){
+          if((Integer.parseInt(P00.get(i))==p0 &&  Integer.parseInt(P11.get(i))==p1)||(Integer.parseInt(P00.get(i))==p1 &&  Integer.parseInt(P11.get(i))==p0)){
 
               Toast.makeText(this,"Correct true P1",Toast.LENGTH_LONG).show();
               flag1=true;
