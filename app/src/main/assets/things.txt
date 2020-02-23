@@ -1,0 +1,26 @@
+Ridge
+Roof
+Chimney pot
+Chimney
+dish
+Wall
+Window
+basket
+Garage
+Basement
+Driveway
+Fence
+Balcony
+Door
+Brick
+Letter
+Antenna
+knocker
+Garage
+Gable
+Shutter
+Skylight
+Step
+Doorstep
+Eaves
+Stairs

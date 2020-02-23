@@ -42,20 +42,23 @@ class AdapterGrid extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
-        //layoutInflater=(LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        //convertView=layoutInflater.inflate(R.layout.setalpha,null);
-        TextView textView=new TextView(this.context);
 
-        textView.setText(Grid[position]);
+        TextView textView=new TextView(this.context);
+        try {
+            if(Grid[position].charAt(0)>='A'&&Grid[position].charAt(0)<='Z')
+                textView.setText(Grid[position]);
+            else textView.setText("!?!");
+        }catch (Exception ex){}
+
+
         textView.setGravity(Gravity.CENTER);
 
         textView.setBackgroundColor(Color.rgb(251,220,187));
-
         textView.setTextColor(Color.parseColor("#040404"));
+        textView.setTextSize(16);
+
 
         textView.setLayoutParams(new GridView.LayoutParams(100, 100));
-
-
 
 
         return  textView;

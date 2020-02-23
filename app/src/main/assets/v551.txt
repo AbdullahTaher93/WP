@@ -1,0 +1,12 @@
+G	N	C	F	H	 
+F	I	O	E	C	 
+I	G	U	E	A	 
+N	E	L	L	L	 
+D	B	D	O	L
+
+BEGIN 41 01
+CALL  14 44
+COULD 02 42
+DO    42 43
+FEEL  03 33
+FIND  10 40

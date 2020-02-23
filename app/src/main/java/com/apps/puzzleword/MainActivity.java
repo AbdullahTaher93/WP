@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
     //numbers of rows and columns
 
 
-    public static final int nRows=10, nCols=10;
+    public static  int nRows, nCols;
     boolean flag=false;
-     public static String [] cells=new String[nCols*nRows];
+     public static String [] cells;
     //size of grid
-    public static final int GridSize=nRows*nCols;
+    public static  int GridSize;
 
     //min numbers of words generated
     public static final int minWords=25;
@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
     GridView gridView;
     List<String> ItemsList;
     String selectedItem0;
-    String selectedItem1;
+
     TextView GridViewItems0,BackSelectedItem0,t;
-    TextView GridViewItems1,BackSelectedItem1;
+
     int backposition0 = -1;
     int backposition1 = -1;
     int p0,p1;
@@ -85,13 +85,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle extras = getIntent().getExtras();
+
+        words.clear();
+        P00.clear();
+        P11.clear();
 
 
 
+        Toast.makeText(this, "Selected: " + nCols+" "+nRows, Toast.LENGTH_LONG).show();
 
-
-        printResult(createWordSearch(read("u.txt")));
-
+        printResult(createWordSearch(read(extras.getString("ID"))));
+        Log.d("", "onCreate: "+extras.getString("ID"));
 
 
         gridView=findViewById(R.id.g1);
@@ -100,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         ItemsList = new ArrayList<String>(Arrays.asList(cells));
         gridView.setAdapter(new AdapterGrid(this,cells));
         ItemsList = new ArrayList<String>();
+        gridView.setBackgroundColor(-271173);
 
         ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1, words);
         g2.setAdapter(arrayAdapter);
@@ -132,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
                     GridViewItems0 = (TextView) view;
                     listDrawableBackground= (ColorDrawable )GridViewItems0.getBackground();
                     colorId = listDrawableBackground.getColor();
-
-                    GridViewItems0.setBackgroundColor(Color.rgb(new Random().nextInt(255),new Random().nextInt(255),new Random().nextInt(255)));
+                    colors[0]=new Random().nextInt(50)+200;
+                    colors[1]=new Random().nextInt(50)+100;
+                    colors[2]=new Random().nextInt(50)+150;
+                    GridViewItems0.setBackgroundColor(Color.rgb(colors[0],colors[1],colors[2]));
                     listDrawableBackground= (ColorDrawable )GridViewItems0.getBackground();
 
                    // String colorCode = (String)GridViewItems0.getTag();
@@ -185,9 +193,7 @@ public class MainActivity extends AppCompatActivity {
                         words.set(PositionOfWords,"XXXXX");
                         arrayAdapter.notifyDataSetChanged();
                         Log.d("", "onItemClick: ya SEE"+p0+" "+p1);
-                        colors[0]=new Random().nextInt(255);
-                        colors[1]=new Random().nextInt(255);
-                        colors[2]=new Random().nextInt(255);
+
 
 
 
@@ -213,25 +219,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-             if ((backposition0 != -1 && backposition1 !=-1 ) && flag==false)
-                {
-                  /*  BackSelectedItem0 = (TextView) gridView.getChildAt(backposition0);
-                    BackSelectedItem1 = (TextView) gridView.getChildAt(backposition1);
-                    BackSelectedItem0.setSelected(false);
-
-                    BackSelectedItem0.setBackgroundColor(Color.parseColor("#fbdcbb"));
-
-                    BackSelectedItem0.setTextColor(Color.parseColor("#040404"));
-
-                    BackSelectedItem1.setSelected(false);
-
-                    BackSelectedItem1.setBackgroundColor(Color.parseColor("#fbdcbb"));
-
-                    BackSelectedItem1.setTextColor(Color.parseColor("#040404"));*/
-
-
-                }
-
 
 
 
@@ -245,21 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //readword("u.txt");
-        //read();
-      /* String te="";
-        try {
-            InputStream is= getAssets().open("u.txt");
-            int size=is.available();
-            byte [] buffer=new byte[size];
-            is.read(buffer);
-            is.close();
-            te=new String(buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        System.out.println(te);*/
 
 
 
@@ -433,6 +406,7 @@ public static int  tryLocation(grid grid,String word, int dir,int pos){
 
     }
     solution=grid.solution;
+
     return lettersPlaced;
 }
 
@@ -477,6 +451,13 @@ public static void printResult(grid grid){
     private boolean Check(int p0,int p1) {
 
        boolean flag1=false;
+       String p00=(p0/nRows)+"";
+       p00+=(p0%nRows);
+        String p11=(p1/nRows)+"";
+        p11+=(p1%nRows);
+        p0=Integer.parseInt(p00);
+        p1=Integer.parseInt(p11);
+
 
        for (int i=0;i<P00.size();i++){
            Log.d("", "Check: Word "+ words.get(i) +" "+P00.get(i)+"   "+P11.get(i)+" "+p0+" "+p1);
@@ -509,11 +490,11 @@ public void DrowLines(int p0,int p1){
             min=p0;
         }
 
-        RowMax=(max/10);
-        ColMax=(max%10);
+        RowMax=(max/nRows);
+        ColMax=(max%nRows);
 
-        RowMin=(min/10);
-        ColMin=(min%10);
+        RowMin=(min/nRows);
+        ColMin=(min%nRows);
 
 
 
@@ -524,7 +505,7 @@ public void DrowLines(int p0,int p1){
                 defcols=ColMax-ColMin;
                 ps=new int[defcols+1];
                 for (int co=ColMin,i=0;i<ps.length;i++){
-                    ps[i]=(RowMax*10)+co;
+                    ps[i]=(RowMax*nRows)+co;
 
                     co++;
 
@@ -534,7 +515,7 @@ public void DrowLines(int p0,int p1){
                 defrows=RowMax-RowMin;
                 ps=new int[defrows+1];
                 for (int i=0;i<ps.length;i++){
-                    ps[i]=(RowMin*10)+(i*10)+ColMax;
+                    ps[i]=(RowMin*nRows)+(i*nRows)+ColMax;
                 }
 
             }
@@ -544,7 +525,7 @@ public void DrowLines(int p0,int p1){
                     defrows=ColMax-ColMin;
                     ps=new int[defrows+1];
                     for (int i=0;i<ps.length;i++){
-                        ps[i]=(RowMin*10)+(i*10)+ColMin+i;
+                        ps[i]=(RowMin*nRows)+(i*nRows)+ColMin+i;
                     }
 
 
@@ -554,7 +535,7 @@ public void DrowLines(int p0,int p1){
                     defrows=ColMin-ColMax;
                     ps=new int[defrows+1];
                     for (int i=0;i<ps.length;i++){
-                        ps[i]=(RowMax*10)-(i*10)+ColMax+i;
+                        ps[i]=(RowMax*nRows)-(i*nRows)+ColMax+i;
                     }
 
 
