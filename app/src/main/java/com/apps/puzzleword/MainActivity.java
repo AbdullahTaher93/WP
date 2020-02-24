@@ -2,6 +2,7 @@ package com.apps.puzzleword;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     //min numbers of words generated
     public static final int minWords=25;
+    public static int level=0;
+    public String WordsType="";
 
     public static final Random RANDOM = new Random();
     public static List<String> solution=new ArrayList<>();
@@ -94,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         Toast.makeText(this, "Selected: " + nCols+" "+nRows, Toast.LENGTH_LONG).show();
+        WordsType=extras.getString("ID");
+        printResult(createWordSearch(read(WordsType)));
 
-        printResult(createWordSearch(read(extras.getString("ID"))));
-        Log.d("", "onCreate: "+extras.getString("ID"));
 
 
         gridView=findViewById(R.id.g1);
@@ -138,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
                     GridViewItems0 = (TextView) view;
                     listDrawableBackground= (ColorDrawable )GridViewItems0.getBackground();
                     colorId = listDrawableBackground.getColor();
-                    colors[0]=new Random().nextInt(50)+200;
-                    colors[1]=new Random().nextInt(50)+100;
-                    colors[2]=new Random().nextInt(50)+150;
+                    colors[0]=new Random().nextInt(55)+200;
+                    colors[1]=new Random().nextInt(150)+100;
+                    colors[2]=new Random().nextInt(150)+150;
                     GridViewItems0.setBackgroundColor(Color.rgb(colors[0],colors[1],colors[2]));
                     listDrawableBackground= (ColorDrawable )GridViewItems0.getBackground();
 
@@ -190,9 +193,23 @@ public class MainActivity extends AppCompatActivity {
                         flag=false;
                         DrowLines(p0, p1);
 
+                        if(!words.get(PositionOfWords).equalsIgnoreCase("XXXXX"))
+                            level++;
+
+                        if(level==words.size()){
+
+                            Toast.makeText(MainActivity.this,"WINS",Toast.LENGTH_LONG).show();
+                            WinsActivity.WordType=WordsType;
+                            WinsActivity.Newlevel=nCols+1;
+                            Intent intent=new Intent(MainActivity.this,WinsActivity.class);
+                            startActivity(intent);
+                        }
+
+
                         words.set(PositionOfWords,"XXXXX");
+
                         arrayAdapter.notifyDataSetChanged();
-                        Log.d("", "onItemClick: ya SEE"+p0+" "+p1);
+
 
 
 

@@ -57,8 +57,11 @@ class AdapterGrid extends BaseAdapter {
         textView.setTextColor(Color.parseColor("#040404"));
         textView.setTextSize(16);
 
+        if(MainActivity.nCols<9)
+        textView.setLayoutParams(new GridView.LayoutParams(150, 150));
+        if(MainActivity.nCols>=9)
+            textView.setLayoutParams(new GridView.LayoutParams(100, 100));
 
-        textView.setLayoutParams(new GridView.LayoutParams(100, 100));
 
 
         return  textView;
